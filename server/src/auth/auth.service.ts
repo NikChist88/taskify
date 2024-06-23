@@ -1,26 +1,81 @@
-import { Injectable } from '@nestjs/common';
-import { CreateAuthDto } from './dto/create-auth.dto';
-import { UpdateAuthDto } from './dto/update-auth.dto';
+import { ForbiddenException, Injectable } from '@nestjs/common';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { AuthDto } from './dto/auth.dto';
+import * as argon from 'argon2';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
-  create(createAuthDto: CreateAuthDto) {
-    return 'This action adds a new auth';
+  constructor(
+    private prisma: PrismaService,
+    private jwt: JwtService,
+    private config: ConfigService,
+  ) {}
+
+  async signup(dto: AuthDto) {
+    try {
+      const hash = await argon.hash(dto.password);
+      const user = await this.prisma.user.create({
+        data: {
+          email: dto.email,
+          hash,
+          firstName: dto.firstName,
+          lastName: dto.lastName,
+        },
+        select: {
+          id: true,
+          email: true,
+          createdAt: true,
+          firstName: true,
+          lastName: true,
+        },
+      });
+
+      return this.signToken(user.id, user.email);
+    } catch (err) {
+      if (err instanceof PrismaClientKnownRequestError) {
+        if (err.code === 'P2002') {
+          throw new ForbiddenException('Credentials taken!');
+        }
+      }
+      throw err;
+    }
   }
 
-  findAll() {
-    return `This action returns all auth`;
+  async signin(dto: AuthDto) {
+    const user = await this.prisma.user.findUnique({
+      where: { email: dto.email },
+    });
+
+    if (!user) throw new ForbiddenException('Credentials incorrect!');
+
+    const pwMatches = await argon.verify(user.hash, dto.password);
+
+    if (!pwMatches) throw new ForbiddenException('Credentials incorrect!');
+
+    return this.signToken(user.id, user.email);
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} auth`;
-  }
+  async signToken(
+    userId: string,
+    email: string,
+  ): Promise<{ access_token: string }> {
+    const payload = {
+      sub: userId,
+      email,
+    };
 
-  update(id: number, updateAuthDto: UpdateAuthDto) {
-    return `This action updates a #${id} auth`;
-  }
+    const secret = this.config.get('JWT_SECRET');
 
-  remove(id: number) {
-    return `This action removes a #${id} auth`;
+    const token = await this.jwt.signAsync(payload, {
+      expiresIn: '1d',
+      secret: secret,
+    });
+
+    return {
+      access_token: token,
+    };
   }
 }
