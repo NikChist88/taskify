@@ -3,9 +3,9 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { SignupDto, SigninDto } from './dto';
-import * as argon from 'argon2';
+import { PrismaService } from 'nestjs-prisma';
+import { SignupDto } from './dto';
+import { hash, verify } from 'argon2';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
@@ -20,11 +20,11 @@ export class AuthService {
 
   async signup(dto: SignupDto) {
     try {
-      const hash = await argon.hash(dto.password);
+      const passwordHash = await hash(dto.password);
       const user = await this.prismaService.user.create({
         data: {
           email: dto.email,
-          hash,
+          hash: passwordHash,
           firstName: dto.firstName,
           lastName: dto.lastName,
         },
@@ -66,7 +66,7 @@ export class AuthService {
       throw new UnauthorizedException('User not found!');
     }
 
-    const pwMatches = await argon.verify(user.hash, password);
+    const pwMatches = await verify(user.hash, password);
     if (!pwMatches) {
       throw new UnauthorizedException('Wrong password!');
     }

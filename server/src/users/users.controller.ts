@@ -1,5 +1,5 @@
 import { User } from '@prisma/client';
-import { GetUser } from 'src/auth/decorators';
+import { GetUser } from 'src/decorators';
 import { JwtGuard } from 'src/auth/guards';
 import {
   Controller,
