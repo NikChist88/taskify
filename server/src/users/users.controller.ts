@@ -12,7 +12,6 @@ import {
 @UseGuards(JwtGuard)
 @Controller('users')
 export class UsersController {
-
   @HttpCode(HttpStatus.OK)
   @Get('me')
   getMe(@GetUser() user: User) {

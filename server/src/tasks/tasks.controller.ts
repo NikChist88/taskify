@@ -29,12 +29,12 @@ export class TasksController {
     return this.tasksService.findOne(id);
   }
 
-  @Patch('task/edit/:id')
+  @Patch('edit/task/:id')
   update(@Param('id') id: string, @Body() dto: Task) {
     return this.tasksService.update(id, dto);
   }
 
-  @Delete('task/remove/:id')
+  @Delete('remove/task/:id')
   remove(@Param('id') id: string) {
     return this.tasksService.remove(id);
   }
