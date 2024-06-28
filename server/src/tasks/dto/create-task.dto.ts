@@ -1,5 +1,5 @@
-import { User } from '@prisma/client';
 import { IsNotEmpty } from 'class-validator';
+import { Labels } from '@prisma/client';
 
 export class CreateTaskDto {
   @IsNotEmpty()
@@ -9,13 +9,4 @@ export class CreateTaskDto {
   labels: Labels;
   completed: boolean;
   userId: string;
-  user: User;
-}
-
-enum Labels {
-  project,
-  frontend,
-  backend,
-  issue,
-  work,
 }
