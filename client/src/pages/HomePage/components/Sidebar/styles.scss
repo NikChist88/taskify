@@ -1,8 +1,9 @@
 .sidebar {
-  max-width: 240px;
+  display: flex;
+  flex-direction: column;
+  max-width: 280px;
   width: 100%;
   height: 100vh;
-  padding: 15px;
   background-color: #fff;
   border-right: 1px solid #eaedf0;
 }
@@ -10,12 +11,85 @@
 .sidebarList {
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  font-weight: 500;
+  margin-bottom: 30px;
+}
+
+.listTitle {
+  font-weight: 600;
+  padding: 14px 24px;
+  text-transform: uppercase;
+  color: #8597a7;
+
+  &_filters {
+    padding: 14px 24px 0;
+  }
 }
 
 .sidebarItem {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 10px;
+  font-weight: 500;
+  padding: 14px 24px;
+  transition: background-color ease-in-out 0.3s;
+  cursor: pointer;
+
+  &::before {
+    position: absolute;
+    content: '';
+    left: 0;
+    top: 0;
+    width: 0px;
+    height: 100%;
+    background-color: #0083fb;
+    transition: width ease-in-out 0.3s;
+    border-radius: 0 15px 15px 0;
+  }
+
+  &:hover {
+    background-color: #f7fafb;
+    &::before {
+      width: 4px;
+    }
+  }
+}
+
+.labelsList {
+  padding: 0 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.labelsItem {
+  position: relative;
+  padding-left: 28px;
+  font-weight: 500;
+  &::before {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    content: '';
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+  }
+
+  &_red::before {
+    background-color: #ff3b56;
+  }
+  &_cyan::before {
+    background-color: #00cce1;
+  }
+  &_yellow::before {
+    background-color: #ffbe65;
+  }
+  &_green::before {
+    background-color: #00b671;
+  }
+  &_orange::before {
+    background-color: #ff894d;
+  }
 }
