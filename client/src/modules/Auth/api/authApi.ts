@@ -19,7 +19,7 @@ export const authApi = api.injectEndpoints({
     }),
     me: builder.query<User, void>({
       query: () => ({
-        url: 'users/me',
+        url: 'auth/me',
         method: 'GET',
       }),
     }),

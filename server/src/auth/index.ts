@@ -1,3 +1,6 @@
-export * from './auth.module';
-export * from './auth.controller';
-export * from './auth.service';
+export { AuthModule } from './auth.module';
+export { AuthController } from './auth.controller';
+export { AuthService } from './auth.service';
+export { GetUser } from './decorators/get-user.decorator';
+export { JwtGuard } from './guards/jwt.gaurd';
+export { JwtStrategy } from './strategy/jwt.strategy';
