@@ -11,6 +11,7 @@ export default defineConfig({
       '@components': path.resolve(__dirname, './src/components'),
       '@store': path.resolve(__dirname, './src/store'),
       '@ui': path.resolve(__dirname, './src/ui'),
+      '@assets': path.resolve(__dirname, './src/assets/'),
       '@prisma': path.resolve(
         __dirname,
         '../server/node_modules/prisma/prisma-client/index'

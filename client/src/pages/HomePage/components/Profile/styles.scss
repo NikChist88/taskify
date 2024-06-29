@@ -1,0 +1,25 @@
+.profile {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  column-gap: 15px;
+  font-size: 14px;
+
+  img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+  }
+}
+
+.menu {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.menuItem {
+  display: flex;
+  gap: 10px;
+}

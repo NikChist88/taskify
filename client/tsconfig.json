@@ -12,6 +12,7 @@
       "@components/*": ["src/components/*"],
       "@store/*": ["src/store/*"],
       "@ui/*": ["src/ui/*"],
+      "@assets/*": ["src/assets/*"],
       "@prisma/*": ["../server/node_modules/prisma/prisma-client/index"]
     },
 
